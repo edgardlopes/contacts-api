@@ -17,10 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.dev.usersapi.repository.PersonRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 @RestController
 @RequestMapping("/api/v1/persons")
-public class UserController {
+public class PersonController {
 
     @Autowired
     private PersonRepository repository;
@@ -38,22 +40,25 @@ public class UserController {
     }
 
     @PostMapping
-    public void create(@RequestBody @Valid Person user) {
+    public ResponseEntity create(@RequestBody @Valid Person user) {
         repository.save(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
     @PutMapping("/{id}")
-    public void create(@PathVariable Long id, @Valid @RequestBody Person user) {
+    public ResponseEntity update(@PathVariable Long id, @Valid @RequestBody Person user) {
         user.setId(id);
         repository.save(user);
+        return ResponseEntity.ok(user);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    public ResponseEntity delete(@PathVariable Long id) {
         if(!repository.existsById(id)){
             throw new ResourceNotFoundException();
         }
         repository.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 
 

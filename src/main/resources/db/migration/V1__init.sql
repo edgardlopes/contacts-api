@@ -13,5 +13,5 @@ create table contact (
     type varchar(255) not null,
     
     primary key(id),
-    foreign key(person_id) references person(id)
+    foreign key(person_id) references person(id) on update cascade on delete cascade
 )
